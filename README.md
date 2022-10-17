@@ -3,9 +3,9 @@ Hello, I am Mohit Verma and I was selected as GSOC 2022 contributor in Open Prin
 
 I have also taken an extension of One and a half month so that the discussion for the final design of GUI could be completed but it is taking more time so, it is still in the process.
 
-cups-pk-helper 
+cups-pk-helper - https://gitlab.freedesktop.org/cups-pk-helper/cups-pk-helper/-/merge_requests/7
 
-Gnome Settings 
+Gnome Settings - https://github.com/vermamohit13/gnome-control-center/tree/cupsdev
 
 # Project Description
 Modern printers usually are driverless IPP printers, and those get discovered and set up fully automatically with CUPS, no Printer Application is required for them, so it is easy for users to get up and running with them.
