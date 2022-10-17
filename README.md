@@ -68,9 +68,6 @@ unsubscribe_general_subscription_cb (gpointer user_data)
 static void
 avahi_service_resolver_cb (GVariant*     output,
                            gpointer      user_data)
-void 
-_cph_cups_get_printer_app_cb (gpointer        data,
-                              gpointer        user_data)
 ```
 Along with these few more helper functions were created.
 
@@ -84,11 +81,11 @@ _cph_cups_get_printer_app_cb (gpointer        data,
 to get the binary paths using several system calls. However this gets the job done.
 
  Update -
-  I and [till.kamppeter](https://github.com/tillkamppeter) has put up a request on [pappl](https://github.com/michaelrsweet/pappl) to [Add IPP operations to request discovered devices and available drivers from Printer Application as server](https://github.com/michaelrsweet/pappl/issues/214).It will be released soon. With this we will be able to make IPP requests and eventually the need for the above function will be over.
+  I and [till.kamppeter](https://github.com/tillkamppeter) has put up a request on [pappl](https://github.com/michaelrsweet/pappl) to [Add IPP operations to request discovered devices and available drivers from Printer Application as server](https://github.com/michaelrsweet/pappl/issues/214). It will be released soon. With this we will be able to make IPP requests and eventually the need for the above function will be over.
 
 
 # Using the new discovery of devices
-With this Approach I have updated the cups-pk-helper `_cph_cups_devices_get()` function which will now also call to pappl for the discovery of devices.
+In cups-pk-helper's `_cph_cups_devices_get()` method will call the below call for the discovery of devices via PAPPL. Also, with the binary path of printer apps from `printer_app_discovery()` method we will now be able to complete the approach we discussed in Updating discovery of devices section.
 
 ``` 
         papplDeviceList ( PAPPL_DEVTYPE_ALL,
@@ -97,17 +94,32 @@ With this Approach I have updated the cups-pk-helper `_cph_cups_devices_get()` f
                           _cph_cups_pappl_device_err_cb,
                           cups ); 
 ```
-Along with this , we will all also run the `printer_app devices` command for all the locally available printer application.
+The Printer Application are called by the below code segment -
 
+```
+for (int i = 0; i < g_list_length (printer_app_backend->services); i++)
+   	  { 
+             AvahiData *printer_app_data = g_list_nth_data (printer_app_backend->services,i); 
+             char *cmd = g_strdup_printf ("%s devices",printer_app_data->binary_path); 
+             
+             if ((fp = exec_command (cups,"cmd")) == NULL)
+             {
+                return FALSE;
+             }
 
+             if (_parse_app_devices (cups, data, fp))
+             {
+                 _cph_cups_set_internal_status ( cups, 
+                                 g_strdup_printf ("Error while getting devices from %s.",printer_app_data->binary_path));
+                 return FALSE;
+             }
+```
+It returns false to indicate a failure if the printer app commands cannot discover devices.
 
-
-
-
-
-
-
-
+Update - 
+ With the request  [Add IPP operations to request discovered devices and available drivers from Printer Application as server](https://github.com/michaelrsweet/pappl/issues/214) . We just now have to make a IPP request to the printer Apps and call the new created method `_cph_cups_get_devices_cb` with a new field of URI as a parameter to acheive functionality to open web interface of printer application. This method will be implemented as soon as the PAPPL v1.3 will be released.
+ 
+ 
 # GUI for Printer Application (Proposed Design)
 
 
