@@ -117,29 +117,31 @@ for (int i = 0; i < g_list_length (printer_app_backend->services); i++)
 It returns false to indicate a failure if the printer app commands cannot discover devices.
 
 Update - 
- With the request  [Add IPP operations to request discovered devices and available drivers from Printer Application as server](https://github.com/michaelrsweet/pappl/issues/214) . We just now have to make a IPP request to the printer Apps and call the new created method `_cph_cups_get_devices_cb` with a new field of URI as a parameter to acheive functionality to open web interface of printer application. This method will be implemented as soon as the PAPPL v1.3 will be released.
+ With the request to [Add IPP operations to request discovered devices and available drivers from Printer Application as server](https://github.com/michaelrsweet/pappl/issues/214) . We just now have to make a IPP request to the printer Apps and call the new created method `_cph_cups_get_devices_cb` with a new field of URI as a parameter to acheive functionality to open web interface of printer application. This method will be implemented as soon as the PAPPL v1.3 will be released.
  
  
-# GUI for Printer Application (Proposed Design)
+# GUI for Printer Application 
+In order to get this GUI implemented the I and [till.kamppeter](https://github.com/tillkamppeter) has created a new request on the [GNOME Settings Gitlab Page](https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1878)
 
+The discussions are still going on about the GUI. We have also contacted Elio at Canonical to get his opinion too. As this process was taking more time than expected. I proceeded and developed a temporary GUI which holds the following buttons to obtain the aim of the project -
 
+1) Search - This button will query Openprinting Web Server ( see https://openprinting.github.io/OpenPrinting-News-November-2021/#printer-querying-on-the-  openprinting-web-server )   via a cul_easy API call provided by  libcurl about the selected printer. This query will return the list of supported         Printer Application along with the internal driver name of the Printer Application for the printer, a human-readable description (the one which you     also see in the web interface of the Printer Application), and the device ID as it is registered for this printer in the Printer Application. This is already implemented and is working well in the temporary UI [see](https://drive.google.com/file/d/1eSJinN_NxyimeTPr_ZQDc0omeI-0lZwH/view?usp=sharing) . It will also have a Recommended tag along with the name of the most appropriate Printer Application.
 
+2) Web Interface Button - It is supposed to open the web interface of the Printer Application for the selected Printer after it is installed. As per Marek , this button should be in the Printer Details Dialog. This button will work similar to the link to Address : ‘localhost’ in the Printer Details Dialog.
+ 
+3) Install - This button will become sensitive when a supported Printer Application (which is not Installed otherwise it should be insensitive)  is selected in the window where supported Printer Application is displayed. This button will allow the user for an automatic Installation of the Printer Applications. This button will be working once the GNOME Settings team and my organization decides the exact method for its working.
 
+4) Auto-Add - This button will add the current printer in the selected Printer Application of the user's choice. Also, the display section of Printer Application will have the most appropriate App preselected along with a "Recommended" tag.
 
+The Temporary dialog is designed in [Camabalanche](https://gitlab.gnome.org/jpu/cambalache) 
 
+![Design of Temporary GUI](https://github.com/vermamohit13/GSOC_2022_Summary/blob/main/Images/Screenshot%20from%202022-10-10%2021-35-30.png)
 
+To test this GUI I have also made few changes and integrated it into G-C-C. I have used a sample "Device-id" to query the Open Printing Web Server and test the functionality. The button works well and is able to query the server and get the supported Application name along with few other details.
 
+![Testing the GUI](https://github.com/vermamohit13/GSOC_2022_Summary/blob/main/Images/Screenshot%20from%202022-10-19%2015-58-29.png)
 
-
-
-
-# Temporary GUI with functionality
-
-
-
-
-
-
-
+# Update
+With our request to [Add IPP operations to request discovered devices and available drivers from Printer Application as server](https://github.com/michaelrsweet/pappl/issues/214) completed. New IPP methods will be implemented to query Printer Application for Discovery of devices.
 
 
